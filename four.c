@@ -13,6 +13,16 @@ void printBoard(void);
 
 char board [ROWS][COLS];
 
+enum players { CPU = 'C', HUMAN = 'H'};
+struct 
+{
+    int player1;
+    char player1Symbol;
+    int player2;
+    char player2Symbol;
+    int nextPlayer;
+} game = {HUMAN, 'O', CPU, 'X', 1};
+
 int main()
 {
     initBoard();
