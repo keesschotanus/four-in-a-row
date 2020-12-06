@@ -25,7 +25,7 @@ struct
     char player2Symbol;
     int nextPlayer;
     int numberOfMoves;
-} game = {CPU, 'O', CPU, 'X', 1, 0};
+} game = {HUMAN, 'O', CPU, 'X', 1, 0};
 
 int main()
 {
@@ -88,7 +88,25 @@ void play()
 
 void usersTurn(char symbol)
 {
-
+    int moved = 0;
+    do {
+        int col;
+        printf("Your move:");
+        scanf("%d", &col); getchar();
+        --col;
+        if (col >=0 && col < COLS && board[0][col] == ' ')
+        {
+            // Drop token into col by placing the players symbol on the right row
+            int row;
+            for (row = 0; board[row][col] == ' '; ++row);
+            board[row - 1][col] = symbol;
+            moved = 1;
+        }
+        else
+        {
+            printf("Illegal move\n");
+        }
+    } while(!moved);
 }
 
 void cpusTurn(char symbol)
