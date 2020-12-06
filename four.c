@@ -13,6 +13,8 @@ void printBoard(void);
 void play(void);
 void usersTurn(char symbol);
 void cpusTurn(char symbol);
+int  evaluateBoard(void);
+int  evaluateLine(int row, int col, int incRow, int incCol);
 
 char board [ROWS][COLS];
 
@@ -118,4 +120,35 @@ void cpusTurn(char symbol)
     // Drop the token in this column
     for (row = 0; row < ROWS && board[row][col] == ' '; ++row);
     board[row - 1][col] = symbol;
+}
+
+int evaluateBoard()
+{
+    int score = 0;
+    int row, col;
+
+    for (row = 0; row < ROWS; ++row)
+    {
+        // Horizontally
+        score += evaluateLine(row, 0, 0, 1);
+
+        // Diagonally
+        score += evaluateLine(row, 0,         1,  1);
+        score += evaluateLine(row, COLS - 1, -1, -1);
+        score += evaluateLine(row, 0,        -1,  1);
+        score += evaluateLine(row, COLS - 1,  1, -1);
+    }
+    
+    // Vertically
+    for (col = 0; col < COLS; ++col)
+    {
+        score += evaluateLine(0, col, 1, 0);
+    }
+
+    return score;
+}
+
+int evaluateLine(int row, int col, int incRow, int incCol)
+{
+    return 0;
 }
