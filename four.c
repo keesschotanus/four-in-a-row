@@ -3,6 +3,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 // Standard board size (may be increased to 9 columns)
 #define ROWS 6
@@ -15,7 +16,7 @@ void usersTurn(char symbol);
 void cpusTurn(char symbol);
 int  evaluateBoard(void);
 int  evaluateLine(int row, int col, int incRow, int incCol);
-int getScoreForTokenLength(char token, int tokenLength);
+int  getScoreForTokenLength(char token, int tokenLength);
 
 char board [ROWS][COLS];
 
@@ -77,6 +78,7 @@ void printBoard(void)
 
 void play() 
 {
+    int score;
     do
     {
         int player = game.nextPlayer == 1 ? game.player1 : game.player2;
@@ -90,7 +92,16 @@ void play()
         game.nextPlayer = game.nextPlayer == 1 ? 2 : 1;
         game.numberOfMoves++;
         printBoard();
-    } while (game.numberOfMoves < ROWS * COLS);
+        score = evaluateBoard();
+
+    } while (game.numberOfMoves < ROWS * COLS && abs(score) < 1000000);
+
+    if (game.numberOfMoves == ROWS * COLS)
+        puts("It is a draw!");
+    else if (score > 1000000)
+        puts("Player 'X' wins!");
+    else
+        puts("Player 'O' wins!");
 }
 
 void usersTurn(char symbol)
