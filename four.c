@@ -245,7 +245,7 @@ struct move minimax(char player, int maximizing, int depth)
     struct move move;
     move.score = evaluateBoard();
 
-    if (depth == 0 || move.score > 10000000 || move.score < -10000000)
+    if (depth == 0 || move.score > 1000000 || move.score < -1000000)
     {
         return move;
     }
