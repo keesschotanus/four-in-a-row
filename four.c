@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 // Standard board size (may be increased to 9 columns)
 #define ROWS 6
@@ -17,6 +18,8 @@ void cpusTurn(char symbol);
 int  evaluateBoard(void);
 int  evaluateLine(int row, int col, int incRow, int incCol);
 int  getScoreForTokenLength(char token, int tokenLength);
+struct move *createPossibleMoves(char symbol);
+struct move minimax(char symbol, int maximizing, int depth);
 
 char board [ROWS][COLS];
 
@@ -138,13 +141,8 @@ void usersTurn(char symbol)
 
 void cpusTurn(char symbol)
 {
-    int row, col;
-    // Find the first empty column
-    for (col = 0; col < COLS && board[0][col] != ' '; ++col);
-
-    // Drop the token in this column
-    for (row = 0; row < ROWS && board[row][col] == ' '; ++row);
-    board[row - 1][col] = symbol;
+    struct move move = minimax(symbol, 1, 7);
+    board[move.row][move.col] = symbol;
 }
 
 int evaluateBoard()
@@ -215,7 +213,7 @@ inline int getScoreForTokenLength(char token, int tokenLength)
     return token == 'X' ? scoresPerTokenLength[tokenLength] : -scoresPerTokenLength[tokenLength];
 }
 
-struct node *createPossibleMoves(char symbol)
+struct move *createPossibleMoves(char symbol)
 {
     struct move *pPreviousMove = NULL;
     struct move *pMove = NULL;
@@ -240,4 +238,57 @@ struct node *createPossibleMoves(char symbol)
     }
 
     return pMove;
+}
+
+struct move minimax(char player, int maximizing, int depth)
+{
+    struct move move;
+    move.score = evaluateBoard();
+
+    if (depth == 0 || move.score > 10000000 || move.score < -10000000)
+    {
+        return move;
+    }
+
+    int bestScore = maximizing ? INT_MIN : INT_MAX;
+    struct move *moves = createPossibleMoves(player);
+    if (moves == NULL)
+    {
+        return move;
+    }
+
+    struct move bestMove;
+    int row, col;
+    while (moves)
+    {
+        board[moves->row][moves->col] = player;
+        row = moves->row;
+        col = moves->col;
+        struct move move = minimax(player == 'X' ? 'O' : 'X', !maximizing, depth - 1);
+        if (maximizing)
+        {
+            if (move.score > bestScore) 
+            {
+                bestScore = move.score;
+                bestMove.col = col;
+                bestMove.row = row;
+                bestMove.score = bestScore;
+            }
+        } else {
+            if (move.score < bestScore)
+            {
+                bestScore = move.score;
+                bestMove.col = col;
+                bestMove.row = row;
+                bestMove.score = bestScore;
+            }
+        }
+
+        // Undo move
+        board[row][col]= ' ';
+        struct node *freeMove = moves;
+        moves = moves->nextMove;
+        free(freeMove);
+    }
+    return bestMove;
 }
