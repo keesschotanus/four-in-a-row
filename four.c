@@ -34,6 +34,15 @@ struct
     int numberOfMoves;
 } game = {HUMAN, 'O', CPU, 'X', 1, 0};
 
+struct move
+{
+    struct move *nextMove;
+    int row;
+    int col;
+    char symbol;
+    int score;
+};
+
 int main()
 {
     initBoard();
@@ -206,3 +215,29 @@ inline int getScoreForTokenLength(char token, int tokenLength)
     return token == 'X' ? scoresPerTokenLength[tokenLength] : -scoresPerTokenLength[tokenLength];
 }
 
+struct node *createPossibleMoves(char symbol)
+{
+    struct move *pPreviousMove = NULL;
+    struct move *pMove = NULL;
+
+    int col;
+    int row;
+    for (col = 0; col < COLS; ++col)
+    {
+        for (row = ROWS - 1; row >= 0; --row)
+        {
+            if (board[row][col] == ' ')
+            {
+                pMove = (struct move *)malloc(sizeof(struct move));
+                pMove->row = row;
+                pMove->col = col;
+                pMove->symbol = symbol;
+                pMove->nextMove = pPreviousMove;
+                pPreviousMove = pMove;
+                break;
+            }
+        }
+    }
+
+    return pMove;
+}
