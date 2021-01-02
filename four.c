@@ -6,20 +6,8 @@
 #include <stdlib.h>
 #include <limits.h>
 
-// Standard board size (may be increased to 9 columns)
-#define ROWS 6
-#define COLS 7
+#include "four.h"
 
-void initBoard(void);
-void printBoard(void);
-void play(void);
-void usersTurn(char symbol);
-void cpusTurn(char symbol);
-int  evaluateBoard(void);
-int  evaluateLine(int row, int col, int incRow, int incCol);
-int  getScoreForTokenLength(char token, int tokenLength);
-struct move *createPossibleMoves(char symbol);
-struct move minimax(char symbol, int maximizing, int depth);
 
 char board [ROWS][COLS];
 
@@ -53,6 +41,13 @@ int main()
 
 
     play();
+
+
+    #ifdef STATISTICS
+        printf("Moves created:%d\n", statistics.movesCreated);
+        printf("Moves removed:%d\n", statistics.movesRemoved);
+    #endif
+
     return 0;
 }
 
@@ -227,6 +222,9 @@ struct move *createPossibleMoves(char symbol)
             if (board[row][col] == ' ')
             {
                 pMove = (struct move *)malloc(sizeof(struct move));
+                #ifdef STATISTICS
+                    statistics.movesCreated++;
+                #endif
                 pMove->row = row;
                 pMove->col = col;
                 pMove->symbol = symbol;
@@ -286,9 +284,13 @@ struct move minimax(char player, int maximizing, int depth)
 
         // Undo move
         board[row][col]= ' ';
-        struct node *freeMove = moves;
+        struct move *freeMove = moves;
         moves = moves->nextMove;
         free(freeMove);
+        #ifdef STATISTICS
+            statistics.movesRemoved++;
+        #endif
+
     }
     return bestMove;
 }
