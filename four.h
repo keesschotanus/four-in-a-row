@@ -3,6 +3,7 @@
 #define COLS 7
 
 #define STATISTICS
+#define ALPHABETA
 
 void    initBoard(void);
 void    printBoard(void);
@@ -14,6 +15,7 @@ int     evaluateLine(int row, int col, int incRow, int incCol);
 int     getScoreForTokenLength(char token, int tokenLength);
 struct  move *createPossibleMoves(char symbol);
 struct  move minimax(char symbol, int maximizing, int depth);
+struct  move alphabeta(char symbol, int maximizing, int depth, int alpha, int beta);
 
 #ifdef STATISTICS
     struct
