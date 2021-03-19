@@ -359,6 +359,16 @@ struct move alphabeta(char player, int maximizing, int depth, int alpha, int bet
 
         if (beta <= alpha) 
         {
+            // Free remaining moves
+            while (moves)
+            {
+                struct move *freeMove = moves;
+                moves = moves->nextMove;
+                free(freeMove);
+                #ifdef STATISTICS
+                    statistics.movesRemoved++;
+                #endif
+            }
             break;
         }
     }
