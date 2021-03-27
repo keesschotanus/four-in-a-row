@@ -47,8 +47,7 @@ The number of created moves however differed greatly.
 
 It is a draw!
 Moves created:614491
-Moves removed:320249
+Moves removed:614491
 
-One conclusion is that I have a memory leak!
-The other conclusion is that I only generate:
+ALpha/Beta only generates:
 (614491 / 7278866) * 100 = 8.44% of the moves.
