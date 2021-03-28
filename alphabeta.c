@@ -5,7 +5,11 @@
 
 struct move_t alphabeta(char player, int maximizing, int depth, int alpha, int beta)
 {
-    struct move_t move;
+    #ifdef STATISTICS
+        evaluatedPositions++;
+    #endif
+
+    struct move_t move, bestMove;
     move.score = evaluateBoard();
 
     if (depth == 0 || move.score > 1000000 || move.score < -1000000)
@@ -14,63 +18,47 @@ struct move_t alphabeta(char player, int maximizing, int depth, int alpha, int b
     }
 
     int bestScore = maximizing ? INT_MIN : INT_MAX;
-    struct move_t *moves = createPossibleMoves(player);
-    if (moves == NULL)
+
+    for (int col = 0; col < COLS; ++col)
     {
-        return move;
-    }
-
-    struct move_t bestMove;
-    int row, col;
-    while (moves)
-    {
-        board[moves->row][moves->col] = player;
-        row = moves->row;
-        col = moves->col;
-        struct move_t move = alphabeta(player == 'X' ? 'O' : 'X', !maximizing, depth - 1, alpha, beta);
-        if (maximizing)
+        if (board[0][col] == ' ')
         {
-            if (move.score > bestScore) 
+            int row;
+            for (row = 1; board[row][col] == ' '; ++row)
+                ;
+            --row;
+            board[row][col] = player;
+ 
+            struct move_t move = alphabeta(player == 'X' ? 'O' : 'X', !maximizing, depth - 1, alpha, beta);
+            if (maximizing)
             {
-                bestScore = move.score;
-                bestMove.col = col;
-                bestMove.row = row;
-                bestMove.score = bestScore;
+                if (move.score > bestScore) 
+                {
+                    bestScore = move.score;
+                    bestMove.col = col;
+                    bestMove.row = row;
+                    bestMove.score = bestScore;
+                }
+                alpha = alpha > bestScore ? alpha : bestScore;
+            } else {
+                if (move.score < bestScore)
+                {
+                    bestScore = move.score;
+                    bestMove.col = col;
+                    bestMove.row = row;
+                    bestMove.score = bestScore;
+                }
+                beta = beta < bestScore ? beta : bestScore;
             }
-            alpha = alpha  > bestScore ? alpha : bestScore;
-        } else {
-            if (move.score < bestScore)
-            {
-                bestScore = move.score;
-                bestMove.col = col;
-                bestMove.row = row;
-                bestMove.score = bestScore;
-            }
-            beta = beta < bestScore ? beta : bestScore;
-        }
 
-        // Undo move
-        board[row][col]= ' ';
-        struct move_t *freeMove = moves;
-        moves = moves->nextMove;
-        free(freeMove);
-        #ifdef STATISTICS
-            statistics.movesRemoved++;
-        #endif
+            // Undo move
+            board[row][col]= ' ';
 
-        if (beta <= alpha) 
-        {
-            // Free remaining moves
-            while (moves)
+            if (beta <= alpha) 
             {
-                struct move_t *freeMove = moves;
-                moves = moves->nextMove;
-                free(freeMove);
-                #ifdef STATISTICS
-                    statistics.movesRemoved++;
-                #endif
+                break;
             }
-            break;
+
         }
     }
 

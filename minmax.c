@@ -6,6 +6,10 @@
 
 struct move_t minimax(char player, int maximizing, int depth)
 {
+    #ifdef STATISTICS
+        evaluatedPositions++;
+    #endif
+
     struct move_t move;
     move.score = evaluateBoard();
 
@@ -15,49 +19,47 @@ struct move_t minimax(char player, int maximizing, int depth)
     }
 
     int bestScore = maximizing ? INT_MIN : INT_MAX;
-    struct move_t *moves = createPossibleMoves(player);
-    if (moves == NULL)
-    {
-        return move;
-    }
-
     struct move_t bestMove;
-    int row, col;
-    while (moves)
+
+    for (int col = 0; col < COLS; ++col)
     {
-        board[moves->row][moves->col] = player;
-        row = moves->row;
-        col = moves->col;
-        struct move_t move = minimax(player == 'X' ? 'O' : 'X', !maximizing, depth - 1);
-        if (maximizing)
+        if (board[0][col] == ' ')
         {
-            if (move.score > bestScore) 
+            int row;
+            for (row = 1; board[row][col] == ' '; ++row)
+                ;
+            --row;
+
+
+            board[row][col] = player;
+            struct move_t move = minimax(player == 'X' ? 'O' : 'X', !maximizing, depth - 1);
+            if (maximizing)
             {
-                bestScore = move.score;
-                bestMove.col = col;
-                bestMove.row = row;
-                bestMove.score = bestScore;
+                if (move.score > bestScore) 
+                {
+                    bestScore = move.score;
+                    bestMove.col = col;
+                    bestMove.row = row;
+                    bestMove.score = bestScore;
+                }
+            } else {
+                if (move.score < bestScore)
+                {
+                    bestScore = move.score;
+                    bestMove.col = col;
+                    bestMove.row = row;
+                    bestMove.score = bestScore;
+                }
             }
-        } else {
-            if (move.score < bestScore)
-            {
-                bestScore = move.score;
-                bestMove.col = col;
-                bestMove.row = row;
-                bestMove.score = bestScore;
-            }
+
+            // Undo move
+            board[row][col]= ' ';
+
         }
-
-        // Undo move
-        board[row][col]= ' ';
-        struct move_t *freeMove = moves;
-        moves = moves->nextMove;
-        free(freeMove);
-        #ifdef STATISTICS
-            statistics.movesRemoved++;
-        #endif
-
     }
+
+
+
     return bestMove;
 }
 
