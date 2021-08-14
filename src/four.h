@@ -6,6 +6,7 @@ char board [ROWS][COLS];
 
 #define STATISTICS
 #define ALPHABETA
+// #define MINIMAX
 
 void    initBoard(void);
 void    printBoard(void);
