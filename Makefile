@@ -1,9 +1,23 @@
-OBJECTS=alphabeta.o board.o eval-simple.o four.o minmax.o
+SRC_DIR := src
+OBJ_DIR := obj
 
-four : $(OBJECTS)
-	cc -o four $(OBJECTS) $(CFLAGS) $(LDFLAGS)
+SRC := $(wildcard $(SRC_DIR)/*.c)
+OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+EXE := four
 
-${OBJECTS}: four.h
+.PHONY: all clean
+all: $(EXE)
 
-clean : 
-	rm four $(OBJECTS)
+$(EXE): $(OBJ)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(OBJ): $(SRC_DIR)/four.h
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR):
+	mkdir -p $@
+
+clean:
+	@$(RM) -rv $(EXE) $(OBJ_DIR)
