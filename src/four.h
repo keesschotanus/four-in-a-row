@@ -1,8 +1,11 @@
+// Level of play, where one PLY is one move 
+#define PLY 13
+
 // Standard board size (may be increased to 9 columns)
 #define ROWS 6
 #define COLS 7
 
-char board [ROWS][COLS];
+extern char board [ROWS][COLS];
 
 #define STATISTICS
 #define ALPHABETA
@@ -26,4 +29,4 @@ struct move_t
     int score;
 };
 
-int evaluatedPositions;
+extern int evaluatedPositions;

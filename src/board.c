@@ -2,6 +2,8 @@
 
 #include "four.h"
 
+char board [ROWS][COLS];
+
 /*
  * Initializes the board by emptying all cells.
  */
