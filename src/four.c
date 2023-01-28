@@ -7,6 +7,8 @@
 
 #include "four.h"
 
+int evaluatedPositions;
+
 enum players { CPU = 'C', HUMAN = 'H'};
 struct 
 {
@@ -85,9 +87,9 @@ void usersTurn(char symbol)
 void cpusTurn(char symbol)
 {
     #ifdef ALPHABETA
-        struct move_t move = alphabeta(symbol, 1, 7, -10000000, 10000000);
+        struct move_t move = alphabeta(symbol, 1, PLY, -10000000, 10000000);
     #else
-        struct move_t move = minimax(symbol, 1, 7);
+        struct move_t move = minimax(symbol, 1, PLY);
     #endif
     board[move.row][move.col] = symbol;
     printf("Move: %d\n", move.col + 1);
