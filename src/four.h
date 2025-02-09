@@ -1,7 +1,7 @@
 // Level of play, where one PLY is one move 
-#define PLY 13
+#define PLY 5
 
-// Standard board size (may be increased to 9 columns)
+// Standard board size (should not be changed)
 #define ROWS 6
 #define COLS 7
 
@@ -9,7 +9,7 @@ extern char board [ROWS][COLS];
 
 #define STATISTICS
 #define ALPHABETA
-// #define MINIMAX
+//#define MINIMAX
 
 void    initBoard(void);
 void    printBoard(void);

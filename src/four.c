@@ -36,8 +36,7 @@ int main()
 void play() 
 {
     int score;
-    do
-    {
+    do {
         int player = game.nextPlayer == 1 ? game.player1 : game.player2;
         int playerSymbol = game.nextPlayer == 1 ? game.player1Symbol : game.player2Symbol;
         
@@ -69,16 +68,13 @@ void usersTurn(char symbol)
         printf("Your move:");
         scanf("%d", &col); getchar();
         --col;
-        if (col >=0 && col < COLS && board[0][col] == ' ')
-        {
+        if (col >=0 && col < COLS && board[0][col] == ' ') {
             // Drop token into col by placing the players symbol on the right row
             int row;
             for (row = 0; board[row][col] == ' '; ++row);
             board[row - 1][col] = symbol;
             moved = 1;
-        }
-        else
-        {
+        } else {
             printf("Illegal move\n");
         }
     } while(!moved);

@@ -10,10 +10,8 @@ char board [ROWS][COLS];
 void initBoard(void)
 {
     int rows, cols;
-    for (rows = 0; rows < ROWS; ++rows)
-    {
-        for (cols = 0; cols < COLS; ++cols)
-        {
+    for (int rows = 0; rows < ROWS; ++rows) {
+        for (int cols = 0; cols < COLS; ++cols) {
             board[rows][cols] = ' ';
         }
     }
@@ -21,17 +19,13 @@ void initBoard(void)
 
 void printBoard(void)
 {
-    int rows, cols;
-
     printf("Score: %d\n", evaluateBoard());
-    for (rows = 0; rows < ROWS; ++rows)
-    {
+    for (int rows = 0; rows < ROWS; ++rows) {
         putchar('|');
-        for (cols = 0; cols < COLS; ++cols)
-        {
+        for (int cols = 0; cols < COLS; ++cols) {
             printf("%c", board[rows][cols]);
         }
         printf("|\n");
     }
-    printf("%.*s\n", COLS + 1, " 123456789");
+    printf("%.*s\n", COLS + 1, " 1234567");
 }

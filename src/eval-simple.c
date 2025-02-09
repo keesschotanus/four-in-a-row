@@ -12,8 +12,7 @@ int evaluateBoard()
     int score = 0;
     int row, col;
 
-    for (row = 0; row < ROWS; ++row)
-    {
+    for (row = 0; row < ROWS; ++row) {
         // Horizontally
         score += evaluateLine(row, 0,         0,  1);
 
@@ -25,8 +24,7 @@ int evaluateBoard()
     }
     
     // Vertically
-    for (col = 0; col < COLS; ++col)
-    {
+    for (col = 0; col < COLS; ++col) {
         score += evaluateLine(0, col, 1, 0);
     }
 
@@ -47,18 +45,14 @@ int evaluateLine(int row, int col, int incRow, int incCol)
     int tokenLength = 0;
     for (; row >= 0 && row < ROWS && col >= 0 && col < COLS; row += incRow, col += incCol) {
         int currentToken = board[row][col];
-        if (currentToken == ' ')
-        {
-            if (previousToken != ' ')
-            {
+        if (currentToken == ' ') {
+            if (previousToken != ' ') {
                 score += getScoreForTokenLength(previousToken, tokenLength);
                 tokenLength = 0;
             }
-        } else if (currentToken == previousToken)
-        {
+        } else if (currentToken == previousToken) {
             tokenLength++;
-        } else
-        {
+        } else {
             score += getScoreForTokenLength(previousToken, tokenLength);
             tokenLength = 1;
         }
