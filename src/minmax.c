@@ -6,9 +6,7 @@
 
 struct move_t minimax(char player, int maximizing, int depth)
 {
-    #ifdef STATISTICS
-        evaluatedPositions++;
-    #endif
+    evaluatedPositions++;
 
     struct move_t move;
     move.score = evaluateBoard();

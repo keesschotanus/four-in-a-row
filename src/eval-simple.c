@@ -5,7 +5,8 @@
 // Theoretically we can get 7 in a row!
 int scoresPerTokenLength [] = {0, 1, 100, 10000, 10000000, 10000000, 10000000, 10000000};
 
-int evaluateLine(int row, int col, int incRow, int incCol);
+static int evaluateLine(int row, int col, int incRow, int incCol);
+static int getScoreForTokenLength(char token, int tokenLength);
 
 int evaluateBoard()
 {
@@ -36,7 +37,7 @@ int evaluateBoard()
  * incRow Number by which the row should be incremented (may be negative)
  * incCol Number by which the col should be incremented (may be negative)
  */
-int evaluateLine(int row, int col, int incRow, int incCol)
+static int evaluateLine(int row, int col, int incRow, int incCol)
 {
     int score = 0;
     char previousToken = ' ';
@@ -62,7 +63,7 @@ int evaluateLine(int row, int col, int incRow, int incCol)
     return score;
 }
 
-inline int getScoreForTokenLength(char token, int tokenLength)
+static inline int getScoreForTokenLength(char token, int tokenLength)
 {
     return token == 'X' ? scoresPerTokenLength[tokenLength] : -scoresPerTokenLength[tokenLength];
 }

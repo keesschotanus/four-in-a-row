@@ -5,9 +5,7 @@
 
 struct move_t alphabeta(char player, int maximizing, int depth, int alpha, int beta)
 {
-    #ifdef STATISTICS
-        evaluatedPositions++;
-    #endif
+    evaluatedPositions++;
 
     struct move_t move, bestMove;
     move.score = evaluateBoard();
@@ -20,8 +18,8 @@ struct move_t alphabeta(char player, int maximizing, int depth, int alpha, int b
 
     for (int col = 0; col < COLS; ++col) {
         if (board[0][col] == ' ') {
-            int row;
-            for (int row = 1; board[row][col] == ' '; ++row)
+            int row = 1;
+            for (; board[row][col] == ' '; ++row)
                 ;
             --row;
             board[row][col] = player;
