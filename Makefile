@@ -1,3 +1,5 @@
+CFLAGS := -g -Wall
+
 SRC_DIR := src
 OBJ_DIR := obj
 
@@ -9,7 +11,7 @@ EXE := four
 all: $(EXE)
 
 $(EXE): $(OBJ)
-	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(OBJ): $(SRC_DIR)/four.h
 
