@@ -21,7 +21,7 @@ struct move_t alphabeta(char player, int maximizing, int depth, int alpha, int b
     for (int col = 0; col < COLS; ++col) {
         if (board[0][col] == ' ') {
             int row;
-            for (row = 1; board[row][col] == ' '; ++row)
+            for (int row = 1; board[row][col] == ' '; ++row)
                 ;
             --row;
             board[row][col] = player;

@@ -10,9 +10,7 @@ int evaluateLine(int row, int col, int incRow, int incCol);
 int evaluateBoard()
 {
     int score = 0;
-    int row, col;
-
-    for (row = 0; row < ROWS; ++row) {
+    for (int row = 0; row < ROWS; ++row) {
         // Horizontally
         score += evaluateLine(row, 0,         0,  1);
 
@@ -24,7 +22,7 @@ int evaluateBoard()
     }
     
     // Vertically
-    for (col = 0; col < COLS; ++col) {
+    for (int col = 0; col < COLS; ++col) {
         score += evaluateLine(0, col, 1, 0);
     }
 

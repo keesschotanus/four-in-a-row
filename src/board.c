@@ -9,7 +9,6 @@ char board [ROWS][COLS];
  */
 void initBoard(void)
 {
-    int rows, cols;
     for (int rows = 0; rows < ROWS; ++rows) {
         for (int cols = 0; cols < COLS; ++cols) {
             board[rows][cols] = ' ';
