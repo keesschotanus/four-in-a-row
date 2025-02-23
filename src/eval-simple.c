@@ -11,21 +11,32 @@ static int getScoreForTokenLength(char token, int tokenLength);
 int evaluateBoard()
 {
     int score = 0;
-    for (int row = 0; row < ROWS; ++row) {
-        // Horizontally
-        score += evaluateLine(row, 0,         0,  1);
 
-        // Diagonally
-        score += evaluateLine(row, 0,         1,  1);
-        score += evaluateLine(row, COLS - 1, -1, -1);
-        score += evaluateLine(row, 0,        -1,  1);
-        score += evaluateLine(row, COLS - 1,  1, -1);
+    // Horizontally
+    for (int row = 0; row < ROWS; ++row) {
+        score += evaluateLine(row, 0, 0,  1);
     }
-    
+
     // Vertically
     for (int col = 0; col < COLS; ++col) {
         score += evaluateLine(0, col, 1, 0);
     }
+
+    // Diagonally (bottom left to top right)
+    score += evaluateLine(3, 0, -1, 1);
+    score += evaluateLine(4, 0, -1, 1);
+    score += evaluateLine(5, 0, -1, 1);
+    score += evaluateLine(5, 1, -1, 1);
+    score += evaluateLine(5, 2, -1, 1);
+    score += evaluateLine(5, 3, -1, 1);
+    
+    // Diagonally (bottom right to top left)
+    score += evaluateLine(3, 6, -1, -1);
+    score += evaluateLine(4, 6, -1, -1);
+    score += evaluateLine(5, 6, -1, -1);
+    score += evaluateLine(5, 5, -1, -1);
+    score += evaluateLine(5, 4, -1, -1);
+    score += evaluateLine(5, 3, -1, -1);
 
     return score;
 }
