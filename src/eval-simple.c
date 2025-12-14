@@ -2,9 +2,20 @@
 
 #include "four.h"
 
+const int DISC_LENGTH_0 = 0;
+const int DISC_LENGTH_1 = 10;
+const int DISC_LENGTH_2 = 1000;
+const int DISC_LENGTH_3 = 100000;
+const int DISC_LENGTH_4 = 100000000;
+
 // Theoretically we can get 7 in a row!
-int scoresPerTokenLength[] = { 0,	 1,	   100,	     10000,
-			       10000000, 10000000, 10000000, 10000000 };
+int scoresPerTokenLength[] = {
+	DISC_LENGTH_0,
+	DISC_LENGTH_1,
+	DISC_LENGTH_2,
+	DISC_LENGTH_3,
+	DISC_LENGTH_4, DISC_LENGTH_4, DISC_LENGTH_4, DISC_LENGTH_4
+};
 
 static int evaluateLine(int row, int col, int incRow, int incCol);
 static int getScoreForTokenLength(char token, int tokenLength);

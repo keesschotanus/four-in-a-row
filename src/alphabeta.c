@@ -11,7 +11,7 @@ struct move_t alphabeta(char player, int maximizing, int depth, int alpha,
 	struct move_t move, bestMove;
 	move.score = evaluateBoard();
 
-	if (depth == 0 || move.score > 1000000 || move.score < -1000000) {
+	if (depth == 0 || move.score > WINNING_SCORE || move.score < -WINNING_SCORE) {
 		return move;
 	}
 

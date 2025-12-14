@@ -5,8 +5,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #include "four.h"
+
+// This score is directly related to the evaluation function in eval-simple.c
+// Currently it is the score for 4 in a row divided by 10 to allow some margin
+int WINNING_SCORE = 10000000;
 
 int evaluatedPositions = 0;
 int ply = 5; // Default number of plies
@@ -101,11 +106,11 @@ static void play()
 		game.numberOfMoves++;
 		printBoard();
 		score = evaluateBoard();
-	} while (game.numberOfMoves < ROWS * COLS && abs(score) < 1000000);
+	} while (game.numberOfMoves < ROWS * COLS && abs(score) < WINNING_SCORE);
 
 	if (game.numberOfMoves == ROWS * COLS)
 		puts("It is a draw!");
-	else if (score > 1000000)
+	else if (score > WINNING_SCORE)
 		puts("Player 'X' wins!");
 	else
 		puts("Player 'O' wins!");
@@ -138,7 +143,7 @@ static void cpusTurn(char symbol)
 {
 	struct move_t move;
 	if (algorithm == ALPHABETA)
-		move = alphabeta(symbol, 1, ply, -10000000, 10000000);
+		move = alphabeta(symbol, 1, ply, INT_MIN, INT_MAX);
 	else
 		move = minimax(symbol, 1, ply);
 

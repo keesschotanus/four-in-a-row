@@ -10,13 +10,18 @@ struct move_t minimax(char player, int maximizing, int depth)
 	struct move_t move;
 	move.score = evaluateBoard();
 
-	if (depth == 0 || move.score > 1000000 || move.score < -1000000)
+	if (depth == 0 || move.score > WINNING_SCORE || move.score < -WINNING_SCORE) {
+		move.col = -1;
+		move.row = -1;
+		move.symbol = player;
 		return move;
+	}
 
 	int bestScore = maximizing ? INT_MIN : INT_MAX;
 	struct move_t bestMove;
 
 	for (int col = 0; col < COLS; ++col) {
+		// Check if the column is not full
 		if (board[0][col] == ' ') {
 			int row;
 			for (row = 1; board[row][col] == ' '; ++row)
@@ -44,6 +49,11 @@ struct move_t minimax(char player, int maximizing, int depth)
 
 			// Undo move
 			board[row][col] = ' ';
+
+			// If a score that wins the game is found we don't need to check the other columns
+			if ((maximizing && bestScore >= WINNING_SCORE) || (!maximizing && bestScore <= -WINNING_SCORE)) {
+				break;
+			}
 		}
 	}
 

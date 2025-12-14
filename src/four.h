@@ -9,6 +9,8 @@ extern char board [ROWS][COLS];
 
 extern int verbose;
 
+extern int WINNING_SCORE;
+
 void    initBoard(void);
 void    printBoard(void);
 int     evaluateBoard(void);
