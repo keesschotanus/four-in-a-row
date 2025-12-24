@@ -3,7 +3,7 @@
 
 #include "four.h"
 
-struct move_t minimax(char player, int maximizing, int depth)
+struct move_t minimax(char player, bool maximizing, int depth)
 {
 	evaluatedPositions++;
 
@@ -29,8 +29,7 @@ struct move_t minimax(char player, int maximizing, int depth)
 			--row;
 
 			board[row][col] = player;
-			struct move_t move = minimax(player == 'X' ? 'O' : 'X',
-						     !maximizing, depth - 1);
+			struct move_t move = minimax(player == 'X' ? 'O' : 'X', !maximizing, depth - 1);
 			if (maximizing) {
 				if (move.score > bestScore) {
 					bestScore = move.score;
