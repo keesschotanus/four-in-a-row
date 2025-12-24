@@ -10,8 +10,8 @@
 #include "four.h"
 
 // This score is directly related to the evaluation function in eval-simple.c
-// Currently it is the score for 4 in a row divided by 10 to allow some margin
-int WINNING_SCORE = 10000000;
+// Currently it is the score for 3 in a row multiplied by 100 to allow some margin
+int WINNING_SCORE = 100000 * 100;
 
 int evaluatedPositions = 0;
 int ply = 5; // Default number of plies
@@ -25,9 +25,9 @@ struct {
 	char player1Symbol;
 	int player2;
 	char player2Symbol;
-	int nextPlayer;
+	int nextPlayer; // 0 or 1
 	int numberOfMoves;
-} game = { HUMAN, 'O', CPU, 'X', 1, 0 };
+} game = { CPU, 'O', CPU, 'X', 0, 0 };
 
 static void processArguments(int argc, char *argv[]);
 static void usersTurn(char symbol);
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 		printf("Positions evaluated:%d\n", evaluatedPositions);
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 /*
@@ -93,16 +93,15 @@ static void play()
 {
 	int score;
 	do {
-		int player = game.nextPlayer == 1 ? game.player1 : game.player2;
-		int playerSymbol = game.nextPlayer == 1 ? game.player1Symbol :
-							  game.player2Symbol;
-
+		int player = game.nextPlayer ? game.player2 : game.player1;
+		int playerSymbol = game.nextPlayer ? game.player2Symbol : game.player1Symbol;
+							  
 		if (player == HUMAN)
 			usersTurn(playerSymbol);
 		else
 			cpusTurn(playerSymbol);
 
-		game.nextPlayer = game.nextPlayer == 1 ? 2 : 1;
+		game.nextPlayer = !game.nextPlayer;
 		game.numberOfMoves++;
 		printBoard();
 		score = evaluateBoard();
@@ -143,9 +142,9 @@ static void cpusTurn(char symbol)
 {
 	struct move_t move;
 	if (algorithm == ALPHABETA)
-		move = alphabeta(symbol, 1, ply, INT_MIN, INT_MAX);
+		move = alphabeta(symbol, symbol == 'X', ply, INT_MIN, INT_MAX);
 	else
-		move = minimax(symbol, 1, ply);
+		move = minimax(symbol, symbol == 'X', ply);
 
 	board[move.row][move.col] = symbol;
 	printf("Move: %d\n", move.col + 1);
