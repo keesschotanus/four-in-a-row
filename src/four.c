@@ -10,8 +10,8 @@
 #include "four.h"
 
 // This score is directly related to the evaluation function in eval-simple.c
-// Currently it is the score for 3 in a row multiplied by 100 to allow some margin
-int WINNING_SCORE = 100000 * 100;
+// Currently it is the score for 3 in a row multiplied by 10 to allow some margin
+int WINNING_SCORE = 100000 * 10;
 
 int evaluatedPositions = 0;
 int ply = 5; // Default number of plies
@@ -27,7 +27,7 @@ struct {
 	char player2Symbol;
 	int nextPlayer; // 0 or 1
 	int numberOfMoves;
-} game = { CPU, 'O', CPU, 'X', 0, 0 };
+} game = { HUMAN, 'O', CPU, 'X', 0, 0 };
 
 static void processArguments(int argc, char *argv[]);
 static void usersTurn(char symbol);

@@ -3,7 +3,8 @@
 
 #include "four.h"
 
-struct move_t alphabeta(char player, bool maximizing, int depth, int alpha, int beta) {
+struct move_t alphabeta(char player, bool maximizing, int depth, int alpha, int beta)
+{
 	evaluatedPositions++;
 
 	struct move_t move, bestMove;
@@ -23,9 +24,7 @@ struct move_t alphabeta(char player, bool maximizing, int depth, int alpha, int 
 			--row;
 			board[row][col] = player;
 
-			struct move_t move =
-				alphabeta(player == 'X' ? 'O' : 'X',
-					  !maximizing, depth - 1, alpha, beta);
+			struct move_t move = alphabeta(player == 'X' ? 'O' : 'X', !maximizing, depth - 1, alpha, beta);
 			if (maximizing) {
 				if (move.score > bestScore) {
 					bestScore = move.score;
@@ -33,7 +32,7 @@ struct move_t alphabeta(char player, bool maximizing, int depth, int alpha, int 
 					bestMove.row = row;
 					bestMove.score = bestScore;
 				}
-					alpha = alpha > bestScore ? alpha : bestScore;
+				alpha = alpha > bestScore ? alpha : bestScore;
 			} else {
 				if (move.score < bestScore) {
 					bestScore = move.score;
@@ -41,14 +40,14 @@ struct move_t alphabeta(char player, bool maximizing, int depth, int alpha, int 
 					bestMove.row = row;
 					bestMove.score = bestScore;
 				}
-					beta = beta < bestScore ? beta : bestScore;
+				beta = beta < bestScore ? beta : bestScore;
 			}
 
 			// Undo move
 			board[row][col] = ' ';
 
-				if (beta <= alpha)
-					break;
+			if (beta <= alpha)
+				break;
 		}
 	}
 
