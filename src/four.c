@@ -9,34 +9,22 @@
 
 #include "four.h"
 
+
+struct game_t game;
+
 // This score is directly related to the evaluation function in eval-simple.c
 // Currently it is the score for 3 in a row multiplied by 10 to allow some margin
 int WINNING_SCORE = 100000 * 10;
 
 int evaluatedPositions = 0;
-int ply = 5; // Default number of plies
-int verbose = 0; // Verbose flag
 
-enum { MINIMAX, ALPHABETA } algorithm = ALPHABETA;
-enum players { CPU = 'C', HUMAN = 'H' };
-
-struct {
-	int player1;
-	char player1Symbol;
-	int player2;
-	char player2Symbol;
-	int nextPlayer; // 0 or 1
-	int numberOfMoves;
-} game = { HUMAN, 'O', CPU, 'X', 0, 0 };
-
-static void processArguments(int argc, char *argv[]);
 static void usersTurn(char symbol);
 static void cpusTurn(char symbol);
 static void play();
 
 int main(int argc, char *argv[])
 {
-	processArguments(argc, argv);
+	game = processArguments(argc, argv);
 	initBoard();
 	printBoard();
 
@@ -49,45 +37,6 @@ int main(int argc, char *argv[])
 	return EXIT_SUCCESS;
 }
 
-/*
- * The following command line arguments are supported:
- * -p <number> Number of plies
- * -v Verbose mode
- * -a <algorithm> Algorithm to use (mm or ab)
- */
-static void processArguments(int argc, char *argv[])
-{
-	for (int i = 1; i < argc; i++) {
-		if (strcmp(argv[i], "-p") == 0 && i + 1 < argc) {
-			int plies = atoi(argv[++i]);
-			if (plies > 0) {
-				ply = plies;
-			} else {
-				fprintf(stderr, "Invalid number of plies: %s\n",
-					argv[i]);
-				exit(EXIT_FAILURE);
-			}
-		} else if (strcmp(argv[i], "-v") == 0) {
-			verbose = 1;
-		} else if (strcmp(argv[i], "-a") == 0 && i + 1 < argc) {
-			if (strcmp(argv[++i], "mm") == 0) {
-				algorithm = MINIMAX;
-			} else if (strcmp(argv[i], "ab") == 0) {
-				algorithm = ALPHABETA;
-			} else {
-				fprintf(stderr,
-					"Invalid algorithm: %s, must be mm {minimax} or ab {alphabeta}\n",
-					argv[i]);
-				exit(EXIT_FAILURE);
-			}
-		} else {
-			fprintf(stderr, "Unknown argument: %s\n", argv[i]);
-			fputs("Usage: four [-p <number-of-plies>] [-v] [-a {mm|ab}]\n",
-			      stderr);
-			exit(EXIT_FAILURE);
-		}
-	}
-}
 
 static void play()
 {
@@ -141,10 +90,10 @@ static void usersTurn(char symbol)
 static void cpusTurn(char symbol)
 {
 	struct move_t move;
-	if (algorithm == ALPHABETA)
-		move = alphabeta(symbol, symbol == 'X', ply, INT_MIN, INT_MAX);
+	if (game.algorithm == ALPHABETA)
+		move = alphabeta(symbol, symbol == 'X', game.plies, INT_MIN, INT_MAX);
 	else
-		move = minimax(symbol, symbol == 'X', ply);
+		move = minimax(symbol, symbol == 'X', game.plies);
 
 	board[move.row][move.col] = symbol;
 	printf("Move: %d\n", move.col + 1);

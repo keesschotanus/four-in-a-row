@@ -18,10 +18,9 @@ struct move_t alphabeta(char player, bool maximizing, int depth, int alpha, int 
 
 	for (int col = 0; col < COLS; ++col) {
 		if (board[0][col] == ' ') {
-			int row = 1;
-			for (; board[row][col] == ' '; ++row)
-				;
-			--row;
+			int row = ROWS - 1;
+			while (board[row][col] != ' ')
+				--row;
 			board[row][col] = player;
 
 			struct move_t move = alphabeta(player == 'X' ? 'O' : 'X', !maximizing, depth - 1, alpha, beta);
