@@ -23,9 +23,9 @@ enum algorithm { MINIMAX, ALPHABETA };
 enum players { CPU = 'C', HUMAN = 'H' };
 
 struct game_t {
-	int player1;
+	enum players player1;
 	char player1Symbol;
-	int player2;
+	enum players player2;
 	char player2Symbol;
 	int nextPlayer; // 0 or 1
 	int numberOfMoves;

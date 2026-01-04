@@ -12,6 +12,7 @@
 int verbose = 0;
 
 static int processPlies(const char *arg);
+static enum players processPlayer(const char *arg);
 static enum algorithm processAlgorithm(const char *arg);
 
 /*
@@ -19,6 +20,8 @@ static enum algorithm processAlgorithm(const char *arg);
  * -p <number> Number of plies
  * -v Verbose mode
  * -a <algorithm> Algorithm to use (mm or ab)
+ * -o <player> Where player is h (human) or c (computer).
+ * -x <player> Where player is h (human) or c (computer).
  */
 struct game_t processArguments(int argc, char *argv[])
 {
@@ -27,18 +30,38 @@ struct game_t processArguments(int argc, char *argv[])
 	for (int i = 1; i < argc; i++) {
 		if (strcmp(argv[i], "-p") == 0 && i + 1 < argc) {
 			game.plies = processPlies(argv[++i]);
+		} else if (strcmp(argv[i], "-o") == 0 && i + 1 < argc) {
+			game.player1 = processPlayer(argv[++i]);
+		} else if (strcmp(argv[i], "-x") == 0 && i + 1 < argc) {
+			game.player2 = processPlayer(argv[++i]);
 		} else if (strcmp(argv[i], "-v") == 0) {
 			verbose = 1;
 		} else if (strcmp(argv[i], "-a") == 0 && i + 1 < argc) {
 			game.algorithm = processAlgorithm(argv[++i]);
 		} else {
 			fprintf(stderr, "Unknown argument: %s\n", argv[i]);
-			fputs("Usage: four [-p <number-of-plies>] [-v] [-a {mm|ab}]\n",
+			fputs("Usage: four [-o h|c] [-x h|c] [-p <number-of-plies>] [-v] [-a {mm|ab}]\n",
 			      stderr);
 			exit(EXIT_FAILURE);
 		}
 	}
 	return game;
+}
+
+enum players processPlayer(const char *arg)
+{
+	enum players player;
+
+	if (strcmp(arg, "h") == 0) {
+		player = HUMAN;
+	} else if (strcmp(arg, "c") == 0) {
+		player = CPU;
+	} else {
+		fprintf(stderr,	"Invalid player: %s, using default value of cpu\n", arg);
+		player = CPU;
+	}
+
+	return player;
 }
 
 int processPlies(const char *arg)
